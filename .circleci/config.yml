@@ -248,6 +248,9 @@ jobs:
             cat backend/.env
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
+      - save_cache:
+          paths: [ .circleci/ansible/inventory.txt ]
+          key: infrastructure
       - destroy-environment
 
   run-migrations:
@@ -257,8 +260,8 @@ jobs:
       - checkout
 #      - attach_workspace:
 #          at: ~/project
-#      - restore_cache:
-#          keys: [ scan-backend ]
+      - restore_cache:
+          keys: [ infrastructure ]
       - run:
           name: install awscli
           command: |
