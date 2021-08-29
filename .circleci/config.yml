@@ -214,7 +214,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - add_ssh_keys:
           fingerprints: ["d3:0d:11:52:96:93:38:ed:84:70:40:c3:5b:ab:0f:6d:a9:05:9a:05"]
       - run:
@@ -248,9 +248,13 @@ jobs:
             cat backend/.env
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
-      - save_cache:
-          paths: [ .circleci/ansible/inventory.txt ]
-          key: infrastructure
+#      - save_cache:
+#          paths: [ .circleci/ansible/inventory.txt ]
+#          key: infrastructure
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - ./project/.circleci/ansible/inventory.txt
       - destroy-environment
 
   run-migrations:
@@ -258,10 +262,10 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-#      - attach_workspace:
-#          at: ~/project
-      - restore_cache:
-          keys: [ infrastructure ]
+      - attach_workspace:
+          at: ~/
+#      - restore_cache:
+#          keys: [ infrastructure ]
       - run:
           name: install awscli
           command: |
@@ -352,7 +356,11 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["d3:0d:11:52:96:93:38:ed:84:70:40:c3:5b:ab:0f:6d:a9:05:9a:05"]
       - attach_workspace:
-          at: ~/project
+          at: ~/
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - ./project/.circleci/ansible/inventory.txt
       - run:
           name: Install dependencies
           command: |
