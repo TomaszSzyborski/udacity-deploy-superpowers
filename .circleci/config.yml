@@ -385,6 +385,8 @@ jobs:
             ls /root/project
             echo "Home project directory"
             ls ~/project
+            echo "Checking Inventory"
+            echo ~/project/.circleci/ansible/inventory.txt
             cd ~/project/.circleci/ansible
             echo $(curl -H "token: 89d23297-b8a0-4ed3-b3d8-f43c0b4fbaf4" \
              --request GET https://api.memstash.io/values/backend_ip) >> ~/project/.circleci/ansible/inventory.txt
