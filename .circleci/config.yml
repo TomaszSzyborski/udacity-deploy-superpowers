@@ -152,18 +152,18 @@ jobs:
           paths: [backend/node_modules]
           key: scan-backend
 
-#  my-bucket:
-#    docker:
-#      - image: amazon/aws-cli
-#    steps:
-#      - checkout
-#      - run:
-#          command: |
-#            aws cloudformation deploy \
-#            --template-file .circleci/files/cloudfront.yml \
-#            --stack-name production-distro \
-#            --parameter-overrides WorkflowID="piiakn7dhzt7jce1i4gtmpe1bb4yoj" \
-#            --tags project=udapeople
+  my-bucket:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name production-distro \
+            --parameter-overrides WorkflowID="pfjinfph45ez95qmuc4x" \
+            --tags project=udapeople
 
   deploy-infrastructure:
     docker:
@@ -501,7 +501,7 @@ jobs:
 workflows:
   default:
     jobs:
-#      - my-bucket
+      - my-bucket
 #      - build-frontend
 #      - build-backend
 #      - test-frontend:
@@ -529,5 +529,5 @@ workflows:
 #          requires: [deploy-backend, deploy-frontend]
 #      - cloudfront-update:
 #          requires: [smoke-test]
-      - cleanup
+#      - cleanup:
 #          requires: [cloudfront-update]
