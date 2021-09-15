@@ -475,6 +475,29 @@ jobs:
       - revert-migrations
       - destroy-environment
 
+  prduction-cloudfront-update:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            pip3 install awscli
+            apk add --update curl
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            pwd
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name production-distro \
+            --parameter-overrides WorkflowID="pfjinfph45ez95qmuc4x" \
+            --tags project=udapeople
+      - revert-migrations
+      - destroy-environment
+
+
   cleanup:
     docker:
       - image: amazon/aws-cli
@@ -529,5 +552,7 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
+      - production-cloudfront-update:
+          requires: [ cloudfront-update ]
 #      - cleanup:
 #          requires: [cloudfront-update]
