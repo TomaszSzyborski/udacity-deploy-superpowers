@@ -475,7 +475,7 @@ jobs:
       - revert-migrations
       - destroy-environment
 
-  prduction-cloudfront-update:
+  production-cloudfront-update:
     docker:
       - image: python:3.7-alpine3.11
     steps:
@@ -554,5 +554,5 @@ workflows:
           requires: [smoke-test]
       - production-cloudfront-update:
           requires: [ cloudfront-update ]
-#      - cleanup:
-#          requires: [cloudfront-update]
+      - cleanup:
+          requires: [production-cloudfront-update]
